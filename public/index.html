@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dicey Growth Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <div class="logo">&#127922;</div>
+      <div>
+        <h1>Dicey</h1>
+        <span class="subtitle">Social Growth Dashboard &middot; Magic Eden</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="countdown" id="countdown"></div>
+      <button class="btn btn-primary" onclick="openModal('weekly')">+ Weekly Update</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- KPI Cards Row -->
+    <section class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">Followers</div>
+        <div class="kpi-value" id="kpi-followers">--</div>
+        <div class="kpi-delta" id="kpi-followers-delta"></div>
+      </div>
+      <div class="kpi-card accent">
+        <div class="kpi-label">Goal Progress</div>
+        <div class="kpi-value" id="kpi-progress">--%</div>
+        <div class="kpi-sub" id="kpi-progress-sub"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Engagement Rate</div>
+        <div class="kpi-value" id="kpi-engagement">--%</div>
+        <div class="kpi-delta" id="kpi-engagement-delta"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Impressions (7d)</div>
+        <div class="kpi-value" id="kpi-impressions">--</div>
+        <div class="kpi-delta" id="kpi-impressions-delta"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Followers Needed / Week</div>
+        <div class="kpi-value" id="kpi-pace">--</div>
+        <div class="kpi-sub" id="kpi-pace-sub"></div>
+      </div>
+    </section>
+
+    <!-- Progress Bar -->
+    <section class="progress-section">
+      <div class="progress-header">
+        <span>Progress to 25,000 Followers</span>
+        <span id="progress-text">0 / 25,000</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progress-bar"></div>
+        <div class="progress-marker" id="pace-marker" title="On-pace target"></div>
+      </div>
+      <div class="progress-labels">
+        <span>Launch: Feb 24</span>
+        <span id="pace-label">On-pace target</span>
+        <span>Goal: May 15</span>
+      </div>
+    </section>
+
+    <!-- Charts Row -->
+    <section class="charts-row">
+      <div class="chart-card">
+        <h3>Follower Growth</h3>
+        <canvas id="followerChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Engagement & Impressions</h3>
+        <canvas id="engagementChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Top Posts & Learnings -->
+    <section class="content-row">
+      <div class="content-card">
+        <div class="card-header">
+          <h3>This Week's Top Posts</h3>
+        </div>
+        <div id="top-posts-list" class="post-list">
+          <p class="empty-state">No top posts yet. Add them in your weekly update.</p>
+        </div>
+      </div>
+      <div class="content-card">
+        <div class="card-header">
+          <h3>Weekly Learnings & Feedback</h3>
+        </div>
+        <div id="learnings-list" class="learnings-list">
+          <p class="empty-state">No learnings yet.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Banger Posts -->
+    <section class="banger-section">
+      <div class="content-card full-width">
+        <div class="card-header">
+          <h3>&#128293; Banger Posts (1,000+ Likes)</h3>
+          <button class="btn btn-small" onclick="openModal('banger')">+ Add Banger</button>
+        </div>
+        <div id="banger-list" class="banger-grid">
+          <p class="empty-state">No banger posts yet. Add posts with 1,000+ likes to track them here.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Weekly History -->
+    <section class="history-section">
+      <div class="content-card full-width">
+        <div class="card-header">
+          <h3>Weekly History</h3>
+        </div>
+        <table class="history-table" id="history-table">
+          <thead>
+            <tr>
+              <th>Week Ending</th>
+              <th>Followers</th>
+              <th>Gained</th>
+              <th>Engagement %</th>
+              <th>Impressions</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="history-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal for Weekly Update -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h2 id="modal-title">Weekly Update</h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+
+      <!-- Weekly Update Form -->
+      <form id="weekly-form" class="modal-form" style="display:none" onsubmit="submitWeekly(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Week Ending (Sunday)</label>
+            <input type="date" id="w-weekEnding" required>
+          </div>
+          <div class="form-group">
+            <label>Total Followers</label>
+            <input type="number" id="w-followers" required placeholder="e.g. 3200">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Followers Gained This Week</label>
+            <input type="number" id="w-followersGained" placeholder="e.g. 815">
+          </div>
+          <div class="form-group">
+            <label>Engagement % (7d)</label>
+            <input type="number" id="w-engagement" step="0.01" required placeholder="e.g. 3.2">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Impressions (7d)</label>
+            <input type="number" id="w-impressions" required placeholder="e.g. 120000">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Top Posts This Week (one per line: description | likes | url)</label>
+          <textarea id="w-topPosts" rows="4" placeholder="Thread on Dicey mint strategy | 342 | https://x.com/...&#10;Meme about rolling the dice | 289 | https://x.com/..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Learnings & Feedback</label>
+          <textarea id="w-learnings" rows="4" placeholder="What worked? What didn't? Key takeaways..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full">Save Weekly Update</button>
+      </form>
+
+      <!-- Banger Post Form -->
+      <form id="banger-form" class="modal-form" style="display:none" onsubmit="submitBanger(event)">
+        <div class="form-group">
+          <label>Post Description</label>
+          <input type="text" id="b-description" required placeholder="e.g. Viral dice meme thread">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Likes</label>
+            <input type="number" id="b-likes" required min="1000" placeholder="1000+">
+          </div>
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="b-date" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Post URL</label>
+          <input type="url" id="b-url" placeholder="https://x.com/...">
+        </div>
+        <div class="form-group">
+          <label>Platform</label>
+          <select id="b-platform">
+            <option value="X">X (Twitter)</option>
+            <option value="Instagram">Instagram</option>
+            <option value="TikTok">TikTok</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Add Banger Post</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

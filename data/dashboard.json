@@ -1,0 +1,45 @@
+{
+  "config": {
+    "brandName": "Dicey",
+    "parentBrand": "Magic Eden",
+    "launchDate": "2026-05-15",
+    "followerGoal": 25000,
+    "bangerThreshold": 1000
+  },
+  "weeklyEntries": [
+    {
+      "id": 1740355200000,
+      "weekEnding": "2026-02-22",
+      "followers": 2385,
+      "followersGained": null,
+      "engagementPct": 2.5,
+      "impressions": 88000,
+      "topPosts": [],
+      "learnings": "Baseline week. Dashboard created. Starting to track growth toward 25K follower goal for May 15 launch.",
+      "dateAdded": "2026-02-24T00:00:00.000Z"
+    },
+    {
+      "id": 1772818514818,
+      "weekEnding": "2026-03-08",
+      "followers": 3358,
+      "followersGained": 1027,
+      "engagementPct": 3.8,
+      "impressions": 68900,
+      "topPosts": [],
+      "learnings": "",
+      "dateAdded": "2026-03-06T17:35:14.818Z"
+    },
+    {
+      "id": 1773683699081,
+      "weekEnding": "2026-03-15",
+      "followers": 5961,
+      "followersGained": 2714,
+      "engagementPct": 6.9,
+      "impressions": 287800,
+      "topPosts": [],
+      "learnings": "",
+      "dateAdded": "2026-03-16T17:54:59.081Z"
+    }
+  ],
+  "bangerPosts": []
+}

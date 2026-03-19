@@ -1,0 +1,6 @@
+node_modules/
+daily-content/node_modules/
+daily-content/.env
+daily-content/output/
+*.log
+.DS_Store
